@@ -1,0 +1,2 @@
+Name,Dataset(or tesing),Accuracy,F-score,Filter_size,Num_filters,Batch_size,Num_epochs,Dropout,Num_hidden,Learning_rate,Loss,Optimizer,Remarks
+RdRpBin_db,cdhit95100_db_66,98.774,0.11014070953759088,[4  6  8  10  12  14],1024,32,1,0.7,1024,0.001,CrossEntropyLoss,Adam,classify without OE with more parameters

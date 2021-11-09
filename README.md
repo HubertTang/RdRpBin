@@ -2,7 +2,7 @@
 
 RdRpBin can identify and classify the RNA virus reads in metagenomic data. It uses RNA-dependent RNA polymerase gene as marker gene, and combines alignment-based strategies and graph-based learning models to do viral composition analysis and novel RNA virus discovery in metagenomic data.
 
-The input file can be `fasta` or `fastq` format which contains the sequencing reads. Please note that since the software generates temporary data in running, please make sure there is enough free space on your hard disk, about 5 times the size of the input file.
+The input file can be `fasta` or `fastq` format which contains the sequencing reads. Please note that since the software generates temporary data in running, please make sure there is enough free space on your hard disk, about 2 times the size of the input file.
 
 
 
@@ -12,26 +12,44 @@ Recommend using Anaconda to install the following packages:
 
 1. Python 3.x
 2. Pytorch
-3. DIAMOND
-4. SGA
+3. diamond
+4. sga
 5. networkx
+6. emboss
+7. hmmer
+8. biopython
+9. tqdm
+
+The Anaconda environment has been save in `environment.yml`, you can use following command to install the environment:
+
+`conda env create -f environment.yml`
 
 
 
 # How to run RdRpBin?
 
-1. Create a directory `<input_dir>` containing your sequencing reads file.
+1. Download the reference dataset and reference files from https://portland-my.sharepoint.com/:f:/g/personal/xubotang2-c_my_cityu_edu_hk/EjViwW1ComFDjo7TeRCN9-4Bqv3wpRAN9oXyWYWNJ1L9gw?e=ClO00i and uncompress them in the current directory.
 
-2. Run the `main.py` script
+2. Create an empty directory `<input_dir>` and put the sequencing reads file `<input_reads>` into this directory.
 
-   `python mian.py <input file path>`
+3. Run the `main.py` script
+
+   `python mian.py <input_file_path>`
 
    Optional arguments:
 
-   -d, --database: the path of the database directory. Default: `RdRpBin_db`
+   -d, --database: the path of the database directory. Default: `RdRpBin_db`.
 
-   -f, --format: the format of the input file. Default: `fasta`
+   -f, --format: the format of the input file. Default: `fasta`.
 
-   -t, --thread: the number of threads
+   -t, --thread: the number of threads. Default: 1.
 
-3. The identified RdRp reads will save in `<input_dir>/log/final`.
+   --learning_rate: the learning rate of GCN. Default: 0.01.
+
+   --epochs: the number of GCN training epochs. Default: 50.
+
+   --hidden: the size of the hidden vector. Default: 64.
+
+   --weight_decay: the weight decay parameter. Default: 5e-4.
+
+4. The identified RdRp reads will save in `<input_dir>/RdRp_reads`.
