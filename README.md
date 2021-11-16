@@ -22,13 +22,16 @@ Recommend using Anaconda to install the following packages:
 
 The Anaconda environment has been save in `environment.yml`, you can use following command to install the environment:
 
-`conda env create -f environment.yml`
+```bash
+conda env create -f environment.yml
+conda activate RdRpBin
+```
 
 
 
 # How to run RdRpBin?
 
-1. Download the reference dataset and taxonomy files from [OneDrive](https://portland-my.sharepoint.com/:f:/g/personal/xubotang2-c_my_cityu_edu_hk/EjViwW1ComFDjo7TeRCN9-4Bqv3wpRAN9oXyWYWNJ1L9gw?e=ClO00i)  (or  [百度网盘/Baidu Netdisk](https://pan.baidu.com/s/1NeOjjicVL5KChp4T5ArlyQ)  code: 5gv5) and uncompress them in the current directory.
+1. Download the reference dataset and taxonomy files from [OneDrive](https://portland-my.sharepoint.com/:f:/g/personal/xubotang2-c_my_cityu_edu_hk/EjViwW1ComFDjo7TeRCN9-4Bqv3wpRAN9oXyWYWNJ1L9gw?e=ClO00i)  (or  [百度网盘/Baidu Netdisk](https://pan.baidu.com/s/1NeOjjicVL5KChp4T5ArlyQ)  code: 5gv5) and uncompress them in the same directory with `main.py`.
 
 2. Create an empty directory `<input_dir>` and put the sequencing reads file `<input_reads>` into this directory.
 
