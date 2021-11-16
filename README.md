@@ -37,7 +37,7 @@ conda activate RdRpBin
 
 3. Run the `main.py` script
 
-   `python mian.py <input_file_path>`
+   `python mian.py <path of input_reads>`
 
    Optional arguments:
 
