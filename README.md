@@ -56,3 +56,6 @@ conda activate RdRpBin
    --weight_decay: the weight decay parameter. Default: 5e-4.
 
 4. The identified RdRp reads will save in `<input_dir>/RdRp_reads`.
+
+# Citation
+Tang, X., Shang, J., & Sun, Y. (2022). RdRp-based sensitive taxonomic classification of RNA viruses for metagenomic data. Briefings in bioinformatics, 23(2), bbac011.
