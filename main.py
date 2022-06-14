@@ -62,11 +62,17 @@ def rdrpbin_cmd():
         type=float, 
         default=5e-4)
     
+    parser.add_argument(
+        '--no_gcn', 
+        type=str, 
+        default='no',
+        help="Run RdRpBin without running GCN (yes/ no)")
+    
     # version
     parser.add_argument(
         '-v', '--version',
         action='version',
-        version='RdRpBin_beta'
+        version='RdRpBin_1.1'
     )
 
     rdrpbin_args = parser.parse_args()
@@ -113,10 +119,30 @@ def merge_rst(log_dir):
     out_file.close()
 
 
+def merge_rst_s12(log_dir):
+    """Merge the results from multiple result.
+    合并多个stage的结果。
+    """
+    os.makedirs(f"{log_dir}/final")
+    out_file = open(f"{log_dir}/final/prediction.csv", 'w')
+    rst_seq_list = []
+        
+    try:
+        prc_rst = pd.read_csv(f"{log_dir}/prc/prediction.csv", sep=',', header=None)
+        for index, pred in zip(prc_rst[0], prc_rst[1]):
+            if index not in rst_seq_list:
+                out_file.write(f"{index},{pred}\n")
+                rst_seq_list.append(index)
+    except pd.errors.EmptyDataError:
+        pass
+        
+    out_file.close()
+
+
 def output_reads(seq_path, format, pred_path):
     """Output the identified reads.
     """
-    work_dir = os.path.dirname(seq_path)
+    work_dir = os.path.dirname(os.path.abspath(seq_path))
     os.makedirs(f"{work_dir}/RdRp_reads")
     
     pred_dict = {}
@@ -134,7 +160,7 @@ def output_reads(seq_path, format, pred_path):
 def run_on_real(args, sim_reads_path, database_name, input_format, num_class, num_thread=1):
     """Run the scripts on the real data.
     """
-    work_dir = os.path.dirname(sim_reads_path)
+    work_dir = os.path.dirname(os.path.abspath(sim_reads_path))
 
     # convert the fasta file into csv file
     seq_utils.fasta2csv_pre(fasta_file=sim_reads_path,
@@ -157,8 +183,9 @@ def run_on_real(args, sim_reads_path, database_name, input_format, num_class, nu
                            blastx_nucl_out=f"{work_dir}/output.blastx.nucl")
 
     # run sga to build the edge between testing edges
-    align_utils.run_sga(reads_file=f"{work_dir}/test_rdrp_sim.csv.index.fasta",
-            tar_f=f"{work_dir}/output.blastx.nucl", threads=num_thread)
+    # align_utils.run_sga(reads_file=f"{work_dir}/test_rdrp_sim.csv.index.fasta",
+    #         tar_f=f"{work_dir}/output.blastx.nucl", threads=num_thread)
+    align_utils.run_sga(reads_dir=work_dir, threads=num_thread)
 
     # run PRC to predict the labels
     os.makedirs(f"{work_dir}/log/prc")
@@ -169,6 +196,14 @@ def run_on_real(args, sim_reads_path, database_name, input_format, num_class, nu
             num_class=num_class,
             pred_dir=f"{work_dir}/log/prc", 
             num_iter=500)
+
+    if args.no_gcn.lower() in ('yes', 'true', 't', 'y', '1'):
+        merge_rst_s12(log_dir=f"{work_dir}/log")
+        
+        output_reads(seq_path=sim_reads_path, 
+                    format=input_format, 
+                    pred_path=f"{work_dir}/log/final/prediction.csv")
+        return
     
     # get the protein of the PRC result
     graph_utils.get_prc_prot(reads_path=f"{work_dir}/test_rdrp_sim.csv.index.fasta", 

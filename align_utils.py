@@ -79,10 +79,25 @@ def get_blastx_right_frame(reads_path, blastx_out, blastx_prot_out, blastx_nucl_
             bno.write(f">{s_id}\n{reads_index[s_id].seq}\n")
 
 
-def run_sga(reads_file, tar_f, threads):
+# def run_sga(reads_file, tar_f, threads):
+#     """Run SGA on all the reads to build the edges.
+#     """
+#     reads_dir = os.path.dirname(reads_file)
+#     os.system(f"cd {reads_dir}\nsga preprocess {reads_file} > {reads_file}.sga.prep")
+#     os.system(f"cd {reads_dir}\nsga index -t {threads} -a ropebwt {reads_file}.sga.prep")
+#     os.system(f"cd {reads_dir}\nsga preprocess {tar_f} > {tar_f}.sga.prep")
+#     os.system(f"cd {reads_dir}\nsga index -t {threads} -a ropebwt {tar_f}.sga.prep")
+#     os.system(f"cd {reads_dir}\nsga overlap -t {threads} -m 80 -e 0.01 -d 2 -f {tar_f}.sga.prep --exhaustive {reads_file}.sga.prep")
+#     os.system(f"cd {reads_dir}\ngunzip -f test_rdrp_sim.csv.index.fasta.sga.output.blastx.nucl.sga.asqg.gz")
+#     # remove the index files
+#     # os.system(f"cd {reads_dir}\nrm {reads_file}.sga.prep")
+
+
+def run_sga(reads_dir, threads):
     """Run SGA on all the reads to build the edges.
     """
-    reads_dir = os.path.dirname(reads_file)
+    reads_file = "test_rdrp_sim.csv.index.fasta"
+    tar_f = "output.blastx.nucl"
     os.system(f"cd {reads_dir}\nsga preprocess {reads_file} > {reads_file}.sga.prep")
     os.system(f"cd {reads_dir}\nsga index -t {threads} -a ropebwt {reads_file}.sga.prep")
     os.system(f"cd {reads_dir}\nsga preprocess {tar_f} > {tar_f}.sga.prep")
