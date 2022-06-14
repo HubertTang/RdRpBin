@@ -55,6 +55,8 @@ conda activate RdRpBin
 
    --weight_decay: the weight decay parameter. Default: 5e-4.
 
+   --no_gcn: run RdRpBin without running GCN. (This argument can reduce the running time with a little decrease in recall). Default: no.
+
 4. The identified RdRp reads will save in `<input_dir>/RdRp_reads`.
 
 # Citation
