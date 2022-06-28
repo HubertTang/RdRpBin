@@ -23,12 +23,12 @@ def rdrpbin_cmd():
         help="Path of input file."
     )
 
-    parser.add_argument(
-        '-d', "--database",
-        type=str,
-        default="RdRpBin_db",
-        help="Database."
-        )
+    # parser.add_argument(
+    #     '-d', "--database",
+    #     type=str,
+    #     default="RdRpBin_db",
+    #     help="Database."
+    #     )
 
     parser.add_argument(
         '-f', "--format",
@@ -290,9 +290,11 @@ if __name__ == "__main__":
     rdrpbin_args = rdrpbin_cmd()
     print(rdrpbin_args)
 
-    n_class = 0
-    if rdrpbin_args.database == 'RdRpBin_db':
-        n_class = 18
+    # n_class = 0
+    # if rdrpbin_args.database == 'RdRpBin_db':
+    #     n_class = 18
+
+    n_class = 18
 
     run_on_real(args = rdrpbin_args,
                 sim_reads_path=rdrpbin_args.input_file,

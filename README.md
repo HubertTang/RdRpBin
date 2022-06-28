@@ -41,8 +41,6 @@ conda activate RdRpBin
 
    Optional arguments:
 
-   -d, --database: the path of the database directory. Default: `RdRpBin_db`.
-
    -f, --format: the format of the input file. Default: `fasta`.
 
    -t, --thread: the number of threads. Default: 1.
