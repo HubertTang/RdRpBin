@@ -107,13 +107,16 @@ def run_merge_fimo_out(train_csv, fimo_out_path, train_meme_dir,
                     fo.write(f"{m}_{o}\t{s}\t{p}\n")
                     motif_set.add(m)
 
-        for m, s, p in zip(test_fimo_df['motif_id'], test_fimo_df['sequence_name'], test_fimo_df['p-value']):
-            # remove the uncorrect train reads
-            if m[0] == '#':
-                continue
-            if p < thres:
-                fo.write(f"{m}_{o}\t{s}\t{p}\n")
-                motif_set.add(m)
+        try:
+            for m, s, p in zip(test_fimo_df['motif_id'], test_fimo_df['sequence_name'], test_fimo_df['p-value']):
+                # remove the uncorrect train reads
+                if m[0] == '#':
+                    continue
+                if p < thres:
+                    fo.write(f"{m}_{o}\t{s}\t{p}\n")
+                    motif_set.add(m)
+        except KeyError:
+            pass
 
         # print(o, motif_set, len(motif_set))
         motif_dict[o] = len(motif_set)

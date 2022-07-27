@@ -2,13 +2,14 @@ from Bio import SeqIO
 from collections import Counter
 import os
 import pandas as pd
+import subprocess
 
 
 def run_blastx(database_path, train_csv, fam_dict_path, 
                query_path, blast_out, pred_out_dir, threads):
     """Run blastx and analyze the result.
     """
-    os.system(f"diamond blastx -d {database_path} -q {query_path} -o {blast_out} -p {threads} -f 6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qframe --very-sensitive ")
+    subprocess.run(f"diamond blastx -d {database_path} -q {query_path} -o {blast_out} -p {threads} -f 6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qframe --very-sensitive ", shell=True)
     
     # load the dictionary which convert the train id into label
     train_index2label = {}
@@ -98,12 +99,15 @@ def run_sga(reads_dir, threads):
     """
     reads_file = "test_rdrp_sim.csv.index.fasta"
     tar_f = "output.blastx.nucl"
-    os.system(f"cd {reads_dir}\nsga preprocess {reads_file} > {reads_file}.sga.prep")
-    os.system(f"cd {reads_dir}\nsga index -t {threads} -a ropebwt {reads_file}.sga.prep")
-    os.system(f"cd {reads_dir}\nsga preprocess {tar_f} > {tar_f}.sga.prep")
-    os.system(f"cd {reads_dir}\nsga index -t {threads} -a ropebwt {tar_f}.sga.prep")
-    os.system(f"cd {reads_dir}\nsga overlap -t {threads} -m 80 -e 0.01 -d 2 -f {tar_f}.sga.prep --exhaustive {reads_file}.sga.prep")
-    os.system(f"cd {reads_dir}\ngunzip -f test_rdrp_sim.csv.index.fasta.sga.output.blastx.nucl.sga.asqg.gz")
+    if not os.path.exists(os.path.join(reads_dir, tar_f)):
+        print(f"No RdRps detected")
+        exit(0)
+    subprocess.run(f"cd {reads_dir}\nsga preprocess {reads_file} > {reads_file}.sga.prep", shell=True)
+    subprocess.run(f"cd {reads_dir}\nsga index -t {threads} -a ropebwt {reads_file}.sga.prep", shell=True)
+    subprocess.run(f"cd {reads_dir}\nsga preprocess {tar_f} > {tar_f}.sga.prep", shell=True)
+    subprocess.run(f"cd {reads_dir}\nsga index -t {threads} -a ropebwt {tar_f}.sga.prep", shell=True)
+    subprocess.run(f"cd {reads_dir}\nsga overlap -t {threads} -m 80 -e 0.01 -d 2 -f {tar_f}.sga.prep --exhaustive {reads_file}.sga.prep", shell=True)
+    subprocess.run(f"cd {reads_dir}\ngunzip -f test_rdrp_sim.csv.index.fasta.sga.output.blastx.nucl.sga.asqg.gz", shell=True)
     # remove the index files
     # os.system(f"cd {reads_dir}\nrm {reads_file}.sga.prep")
 
@@ -111,12 +115,12 @@ def run_sga(reads_dir, threads):
 def make_diamond_db(fn_in, fn_out, cpu: int):
     """Build Diamond blastp database.
     """
-    os.system(f"diamond makedb --threads {cpu} --in {fn_in} -d {fn_out}")
+    subprocess.run(f"diamond makedb --threads {cpu} --in {fn_in} -d {fn_out}", shell=True)
 
 
 def run_diamond(aa_fp, db_fp, cpu: int, diamond_out_fn, e_value):
     """Run Diamond to blastp
     """
-    os.system(f"diamond blastp --threads {cpu} --sensitive -d {db_fp} -q {aa_fp} -o {diamond_out_fn} -e {e_value}")
+    subprocess.run(f"diamond blastp --threads {cpu} --sensitive -d {db_fp} -q {aa_fp} -o {diamond_out_fn} -e {e_value}", shell=True)
 
 

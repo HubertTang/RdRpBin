@@ -206,10 +206,10 @@ def run_on_real(args, sim_reads_path, database_name, input_format, num_class, nu
         return
     
     # get the protein of the PRC result
-    graph_utils.get_prc_prot(reads_path=f"{work_dir}/test_rdrp_sim.csv.index.fasta", 
-                 blast_prot_path=f"{work_dir}/output.blastx.prot",
-                 prc_rst=f"{work_dir}/log/prc/prediction.csv",
-                 sga_rst=f"{work_dir}/test_rdrp_sim.csv.index.fasta.sga.output.blastx.nucl.sga.asqg")
+    prc_out = graph_utils.get_prc_prot(reads_path=f"{work_dir}/test_rdrp_sim.csv.index.fasta", 
+                                       blast_prot_path=f"{work_dir}/output.blastx.prot",
+                                       prc_rst=f"{work_dir}/log/prc/prediction.csv",
+                                       sga_rst=f"{work_dir}/test_rdrp_sim.csv.index.fasta.sga.output.blastx.nucl.sga.asqg")
 
     # translate the reads into protein
     seq_utils.translate2protein_transeq(input_file_path=f"{work_dir}/test_rdrp_sim.csv.index.fasta",

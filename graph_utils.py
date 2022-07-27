@@ -142,11 +142,19 @@ def get_prc_prot(reads_path, blast_prot_path, prc_rst, sga_rst):
 
     # get the corresponding dna
     temp_dir_path = f"{os.path.dirname(reads_path)}/prc_temp"
+    num_prc_out = 0
     os.makedirs(temp_dir_path)
     with open(f"{temp_dir_path}/prc_seq.dna.fasta", 'w') as prc_dna:
         for s_id in prc_reads_id_list:
             if s_id not in blast_prot_id_list:
                 prc_dna.write(f">{s_id}\n{reads_index[s_id].seq}\n")
+                num_prc_out += 1
+
+    # see if prc gets results
+    if num_prc_out == 0:
+        with open(f"{temp_dir_path}/prc_seq.prc.prot.fasta", 'w') as prc_prot:
+            pass
+        return "no_prc_graph"
     
     # translate the dna to protein
     seq_utils.translate2protein(f"{temp_dir_path}/prc_seq.dna.fasta", True)
@@ -210,6 +218,8 @@ def get_prc_prot(reads_path, blast_prot_path, prc_rst, sga_rst):
         for s in prc_reads_id_list:
             if s not in out_seq_list:
                 prc_prot.write(f">{s}_n\n{'X'*66}\n")
+
+    return "prc_graph"
 
 
 def build_graph(train_embed, valid_embed, test_embed, train_blastp_out,
