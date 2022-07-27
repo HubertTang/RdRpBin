@@ -35,28 +35,46 @@ def batch_iterator(iterator, batch_size):
             yield batch
 
 
+# def split_fasta(fasta_file, num_split=10):
+#     """Split original fasta file into several fasta files.
+#     """
+#     num_reads = int(subprocess.check_output("grep -c '^>' {}".format(fasta_file), shell=True).split()[0])
+#     num_per_split = num_reads // num_split
+    
+#     record_iter = SeqIO.parse(fasta_file, "fasta")
+#     for i, batch in enumerate(batch_iterator(record_iter, num_per_split)):
+#         filename = f"{fasta_file}.{i}"
+#         with open(filename, "w") as handle:
+#             count = SeqIO.write(batch, handle, "fasta")
+#         print("Wrote %i records to %s" % (count, filename))
+
+#     if os.path.exists(f"{fasta_file}.{num_split}"):
+#         with open(f"{fasta_file}.{num_split+1}", 'w') as outfile:
+#             for fname in [f"{fasta_file}.{num_split-1}", f"{fasta_file}.{num_split}"]:
+#                 with open(fname) as infile:
+#                     outfile.write(infile.read())
+
+#         os.remove(f"{fasta_file}.{num_split-1}")
+#         os.remove(f"{fasta_file}.{num_split}")
+#         os.rename(f"{fasta_file}.{num_split+1}", f"{fasta_file}.{num_split-1}")
+
+
 def split_fasta(fasta_file, num_split=10):
     """Split original fasta file into several fasta files.
     """
     num_reads = int(subprocess.check_output("grep -c '^>' {}".format(fasta_file), shell=True).split()[0])
-    num_per_split = num_reads // num_split
+    num_per_split = num_reads // num_split + 1
     
     record_iter = SeqIO.parse(fasta_file, "fasta")
+    num_files = 0
     for i, batch in enumerate(batch_iterator(record_iter, num_per_split)):
         filename = f"{fasta_file}.{i}"
         with open(filename, "w") as handle:
             count = SeqIO.write(batch, handle, "fasta")
         print("Wrote %i records to %s" % (count, filename))
+        num_files += 1
 
-    if os.path.exists(f"{fasta_file}.{num_split}"):
-        with open(f"{fasta_file}.{num_split+1}", 'w') as outfile:
-            for fname in [f"{fasta_file}.{num_split-1}", f"{fasta_file}.{num_split}"]:
-                with open(fname) as infile:
-                    outfile.write(infile.read())
-
-        os.remove(f"{fasta_file}.{num_split-1}")
-        os.remove(f"{fasta_file}.{num_split}")
-        os.rename(f"{fasta_file}.{num_split+1}", f"{fasta_file}.{num_split-1}")
+    return num_files
 
 
 def fasta2csv_pre(fasta_file, in_format, label):
@@ -175,7 +193,7 @@ def translate2protein_transeq(input_file_path, threads):
     
     # translate and filter out the reads with stop codon
     # num_procr = multiprocessing.cpu_count()
-    split_fasta(fasta_file=input_file_path, num_split=threads)
+    threads = split_fasta(fasta_file=input_file_path, num_split=threads)
 
     pool = Pool(processes=threads)
     for temp_id in range(threads):
