@@ -19,6 +19,7 @@ Recommend using Anaconda to install the following packages:
 7. hmmer
 8. biopython
 9. tqdm
+10. meme
 
 The Anaconda environment has been save in `environment.yml`, you can use following command to install the environment:
 
@@ -56,6 +57,14 @@ conda activate RdRpBin
    --no_gcn: run RdRpBin without running GCN. (This argument can reduce the running time with a little decrease in recall). Default: no.
 
 4. The identified RdRp reads will save in `<input_dir>/RdRp_reads`.
+
+### Example
+
+```
+python mian.py example/test.fasta -t 6
+```
+
+
 
 # Citation
 Tang, X., Shang, J., & Sun, Y. (2022). RdRp-based sensitive taxonomic classification of RNA viruses for metagenomic data. Briefings in bioinformatics, 23(2), bbac011.
