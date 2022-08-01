@@ -154,7 +154,7 @@ def translate2protein(input_file_path, filter=True):
     
     # translate and filter out the reads with stop codon
     num_procr = multiprocessing.cpu_count()
-    split_fasta(fasta_file=input_file_path, num_split=num_procr)
+    num_procr = split_fasta(fasta_file=input_file_path, num_split=num_procr)
     
     pool = Pool(processes=num_procr)
     for temp_id in range(num_procr):
