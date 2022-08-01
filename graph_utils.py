@@ -113,7 +113,7 @@ def run_prc(train_csv, test_csv, blastx_out, sga_out, num_class,
             pred_array_out.write(f"{n}\t{label_prob_dict[n]}\n")
 
 
-def get_prc_prot(reads_path, blast_prot_path, prc_rst, sga_rst):
+def get_prc_prot(reads_path, blast_prot_path, prc_rst, sga_rst, num_thread):
     """Get the protein of the PRC reads.
     """
     reads_index = SeqIO.index(reads_path, 'fasta')
@@ -157,7 +157,8 @@ def get_prc_prot(reads_path, blast_prot_path, prc_rst, sga_rst):
         return "no_prc_graph"
     
     # translate the dna to protein
-    seq_utils.translate2protein(f"{temp_dir_path}/prc_seq.dna.fasta", True)
+    # seq_utils.translate2protein(f"{temp_dir_path}/prc_seq.dna.fasta", num_thread, True)
+    seq_utils.translate2protein_transeq(f"{temp_dir_path}/prc_seq.dna.fasta", num_thread)
     with open(f"{temp_dir_path}/prc_seq.dna.fasta.protein", 'a') as ps_a:
         for s in blast_prot_index:
             ps_a.write(f">{s}_x\n{blast_prot_index[s].seq}\n")

@@ -146,15 +146,15 @@ def trans_6_frame_all(dna_fasta, filter_stop_codon=True):
     SeqIO.write(protein_list, f"{dna_fasta}.protein", 'fasta')
 
 
-def translate2protein(input_file_path, filter=True):
+def translate2protein(input_file_path, num_thread, filter=True):
     """Translate the DNA to protein.
     """
     work_dir = os.path.dirname(input_file_path)
     input_file_name = input_file_path.split('/')[-1]
     
     # translate and filter out the reads with stop codon
-    num_procr = multiprocessing.cpu_count()
-    num_procr = split_fasta(fasta_file=input_file_path, num_split=num_procr)
+    # num_procr = multiprocessing.cpu_count()
+    num_procr = split_fasta(fasta_file=input_file_path, num_split=num_thread)
     
     pool = Pool(processes=num_procr)
     for temp_id in range(num_procr):
