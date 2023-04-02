@@ -38,7 +38,7 @@ conda activate RdRpBin
 
 3. Run the `main.py` script
 
-   `python mian.py <path of input_reads>`
+   `python main.py <path of input_reads>`
 
    Optional arguments:
 
@@ -61,7 +61,7 @@ conda activate RdRpBin
 ### Example
 
 ```
-python mian.py example/test.fasta -t 6
+python main.py example/test.fasta -t 6
 ```
 
 
