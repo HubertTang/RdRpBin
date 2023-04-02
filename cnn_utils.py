@@ -60,7 +60,7 @@ def run_CNN_pred(database_name, test_csv, num_class=18, seq_len=66,
     trained_model = cnn_model.RdRpBinCNN(num_class=num_class, num_token=num_token, 
                                          seq_len=seq_len, kernel_nums=num_filter, kernel_sizes=filter_size, 
                                          dropout=dropout, num_fc=num_hidden, out_logit=False).to(device)
-    trained_model.load_state_dict(torch.load(f"{database_name}/cnn_model.pt"))
+    trained_model.load_state_dict(torch.load(f"{database_name}/cnn_model.pt", map_location=device))
     
     num_test = int(subprocess.check_output(f'wc -l {test_csv}', shell=True).split()[0])
 
