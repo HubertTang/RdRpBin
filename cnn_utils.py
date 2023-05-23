@@ -8,12 +8,16 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 
 # Device configuration
-device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+# device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
 
-def pred_fc(data_loader, model, num_hidden, num_data):
+def pred_fc(data_loader, model, num_hidden, num_data, force_cpu=False):
     """Generate the embedding input vector using the trained model.
     """
+    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+    if force_cpu:
+        device = torch.device('cpu')
+
     model.eval()
     result = np.ones((num_data, num_hidden))
 
@@ -36,9 +40,13 @@ def pred_fc(data_loader, model, num_hidden, num_data):
 
 
 def run_CNN_pred(database_name, test_csv, num_class=18, seq_len=66, 
-                 num_token=21, batch_size=1024, threads=1):
+                 num_token=21, batch_size=1024, threads=1, force_cpu=False):
     """Run CNN and output the FC1 vector.
     """
+    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+    if force_cpu:
+        device = torch.device('cpu')
+
     # from history.csv import the parameters of the model
     df = pd.read_csv("CNN_param.log", sep=',')
 
@@ -64,7 +72,7 @@ def run_CNN_pred(database_name, test_csv, num_class=18, seq_len=66,
     
     num_test = int(subprocess.check_output(f'wc -l {test_csv}', shell=True).split()[0])
 
-    temp_arr = pred_fc(test_loader, trained_model, num_hidden, num_test)
+    temp_arr = pred_fc(test_loader, trained_model, num_hidden, num_test, force_cpu=force_cpu)
     print(f"Test embedding vector size: {temp_arr.shape}")
     np.save(f"{test_csv}.FC1", temp_arr)
 

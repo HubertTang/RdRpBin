@@ -68,6 +68,12 @@ def rdrpbin_cmd():
         default='no',
         help="Run RdRpBin without running GCN (yes/ no)")
     
+    parser.add_argument(
+        '--force_cpu', 
+        type=bool, 
+        default=False,
+        help="Run RdRpBin using CPU")
+    
     # version
     parser.add_argument(
         '-v', '--version',
@@ -247,7 +253,7 @@ def run_on_real(args, sim_reads_path, database_name, input_format, num_class, nu
     # run CNN to get the embedding vector of the testing reads
     cnn_utils.run_CNN_pred(database_name=database_name, 
                  test_csv=f"{work_dir}/rest_reads_prot.fasta.full.csv",
-                 num_class=num_class, threads=num_thread)
+                 num_class=num_class, threads=num_thread, force_cpu=args.force_cpu)
 
     # run fimo and extract the fimo output
     motif_utils.run_merge_fimo_out(train_csv=f"{database_name}/data/train.csv", 
@@ -277,7 +283,8 @@ def run_on_real(args, sim_reads_path, database_name, input_format, num_class, nu
     motif_gcn_utils.train_motif_GCN(args=args,
                     motif_gcn_temp_dir=f"{work_dir}/motif_gcn_temp", 
                     train_csv_path=f"{database_name}/data/train.csv", 
-                    pred_out_path=f"{work_dir}/log/motif_gcn/prediction.csv")
+                    pred_out_path=f"{work_dir}/log/motif_gcn/prediction.csv",
+                    force_cpu=args.force_cpu)
 
     merge_rst(log_dir=f"{work_dir}/log")
 

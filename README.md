@@ -42,19 +42,21 @@ conda activate RdRpBin
 
    Optional arguments:
 
-   -f, --format: the format of the input file. Default: `fasta`.
+   -f, --format: the format of the input file. *Default: `fasta`*.
 
-   -t, --thread: the number of threads. Default: 1.
+   -t, --thread: the number of threads. *Default: 1*.
 
-   --learning_rate: the learning rate of GCN. Default: 0.01.
+   --learning_rate: the learning rate of GCN. *Default: 0.01*.
 
-   --epochs: the number of GCN training epochs. Default: 50.
+   --epochs: the number of GCN training epochs. *Default: 50*.
 
-   --hidden: the size of the hidden vector. Default: 64.
+   --hidden: the size of the hidden vector. *Default: 64*.
 
-   --weight_decay: the weight decay parameter. Default: 5e-4.
+   --weight_decay: the weight decay parameter. *Default: 5e-4*.
 
-   --no_gcn: run RdRpBin without running GCN. (This argument can reduce the running time with a little decrease in recall). Default: no.
+   --no_gcn: run RdRpBin without running GCN. (This argument can reduce the running time with a little decrease in recall). *Default: no*.
+
+   --force_cpu: Run RdRpBin using CPU. *Default: False*
 
 4. The identified RdRp reads will save in `<input_dir>/RdRp_reads`.
 

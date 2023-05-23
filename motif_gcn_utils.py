@@ -3,6 +3,7 @@ from motif_gcn_scripts.utils import masked_loss, masked_acc
 from motif_gcn_scripts import model
 import networkx as nx
 import numpy as np
+import os
 import pandas as pd
 import pickle as pkl
 import  scipy.sparse as sp
@@ -12,9 +13,12 @@ from torch import optim
 
 
 
-def train_motif_GCN(args, motif_gcn_temp_dir, train_csv_path, pred_out_path):
+def train_motif_GCN(args, motif_gcn_temp_dir, train_csv_path, pred_out_path, force_cpu=False):
     """Train the motif GCN model.
     """
+    
+    if force_cpu:
+        os.environ["CUDA_VISIBLE_DEVICES"]=""
 
     if torch.cuda.is_available():
         torch.cuda.set_device(0)
@@ -79,9 +83,11 @@ def train_motif_GCN(args, motif_gcn_temp_dir, train_csv_path, pred_out_path):
 
     else:
         train_label = torch.from_numpy(y_train).long()
+        valid_label = torch.from_numpy(y_valid).long()
         num_classes = max(labels)+1
         train_mask = torch.from_numpy(train_mask.astype(np.bool))
         test_label = torch.from_numpy(y_test).long()
+        valid_mask = torch.from_numpy(valid_mask.astype(np.bool))
         test_mask = torch.from_numpy(test_mask.astype(np.bool))
 
         i = torch.from_numpy(features[0]).long()
